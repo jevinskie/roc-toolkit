@@ -1,3 +1,4 @@
 [submodule "3rdparty/_distfiles"]
 	path = 3rdparty/_distfiles
-	url = https://github.com/roc-streaming/distfiles.git
+	url = https://github.com/jevinskie/roc-distfiles.git
+	branch = jevinskie/feat/flac
