@@ -1548,6 +1548,65 @@ elif ctx.pkg_name == 'google-benchmark':
     changedir(ctx, '..')
     install_tree(ctx, 'include', ctx.pkg_inc_dir, include=['*.h'])
     install_files(ctx, 'build/src/libbenchmark.a', ctx.pkg_lib_dir)
+elif ctx.pkg_name == 'flac':
+    download(
+        ctx,
+        'https://ftp.osuosl.org/pub/xiph/releases/flac/flac-{ctx.pkg_ver}.tar.xz',
+        'flac-{ctx.pkg_ver}.tar.xz')
+    unpack(
+        ctx,
+        'flac-{ctx.pkg_ver}.tar.xz',
+        'flac-{ctx.pkg_ver}')
+    changedir(ctx, 'src/flac-{ctx.pkg_ver}')
+    if ctx.prefer_cmake:
+        mkpath('build')
+        changedir(ctx, 'build')
+        execute_cmake(ctx, '..', args=[
+            '-DBUILD_CXXLIBS=ON',
+            '-DBUILD_PROGRAMS=OFF',
+            '-DBUILD_EXAMPLES=OFF',
+            '-DBUILD_TESTING=OFF',
+            '-DBUILD_DOCS=OFF',
+            '-DINSTALL_MANPAGES=OFF',
+            '-DWITH_OGG=OFF',
+            '-DBUILD_SHARED_LIBS=OFF',
+            '-DENABLE_MULTITHREADING=ON',
+            ])
+        execute_cmake_build(ctx)
+        shutil.copy('src/libFLAC/libFLAC.a', '../libFLAC.a')
+        shutil.copy('src/libFLAC++/libFLAC++.a', '../libFLAC++.a')
+        changedir(ctx, '..')
+    else:
+        execute(ctx, './configure --host={host} {vars} {flags} {opts}'.format(
+                host=ctx.toolchain,
+                vars=format_vars(ctx),
+                flags=format_flags(ctx),
+                opts=' '.join([
+                    '--enable-debug=' + 'yes' if ctx.variant == 'debug' else 'no',
+                    '--enable-static=yes',
+                    '--enable-shared=no',
+                    '--disable-doxygen-docs',
+                    '--enable-cpplibs',
+                    '--disable-ogg',
+                    '--disable-programs',
+                    '--disable-examples',
+                    '--enable-multithreading',
+                    '--enable-year2038',
+                ])))
+        execute_make(ctx)
+        shutil.copy('src/libFLAC/.libs/libFLAC.a', 'libFLAC.a')
+        shutil.copy('src/libFLAC++/.libs/libFLAC++.a', 'libFLAC++.a')
+    install_tree(ctx, 'include/FLAC', os.path.join(ctx.pkg_inc_dir, 'FLAC'))
+    install_tree(ctx, 'include/FLAC++', os.path.join(ctx.pkg_inc_dir, 'FLAC++'))
+    rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC', 'Makefile.am'))
+    rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC', 'Makefile.in'))
+    rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC++', 'Makefile.am'))
+    rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC++', 'Makefile.in'))
+    if not ctx.prefer_cmake:
+        rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC', 'Makefile'))
+        rmpath(os.path.join(ctx.pkg_inc_dir, 'FLAC++', 'Makefile'))
+    install_files(ctx, 'libFLAC.a', ctx.pkg_lib_dir)
+    install_files(ctx, 'libFLAC++.a', ctx.pkg_lib_dir)
 # end of deps
 else:
     die("unknown 3rdparty '{}'", ctx.pkg)

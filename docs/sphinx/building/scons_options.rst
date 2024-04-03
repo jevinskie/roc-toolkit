@@ -63,6 +63,7 @@ Options
 --disable-c11                                  disable C11 support
 --disable-soversion                            don't write version into the shared library and don't create version symlinks
 --disable-openfec                              disable OpenFEC support required for FEC codes
+--disable-flac                                 disable FLAC support
 --disable-speexdsp                             disable SpeexDSP support for resampling
 --disable-sox                                  disable SoX support in tools
 --disable-openssl                              disable OpenSSL support required for DTLS and SRTP
@@ -70,6 +71,7 @@ Options
 --disable-alsa                                 disable ALSA support in tools
 --disable-pulseaudio                           disable PulseAudio support in tools
 --with-openfec-includes=WITH_OPENFEC_INCLUDES  path to the directory with OpenFEC headers (it should contain lib_common and lib_stable subdirectories)
+--with-flac-includes=WITH_FLAC_INCLUDES        path to the directory with FLAC and FLAC++ header directories
 --with-includes=WITH_INCLUDES                  additional include search path, may be used multiple times
 --with-libraries=WITH_LIBRARIES                additional library search path, may be used multiple times
 --macos-platform=MACOS_PLATFORM                macOS target platform, e.g. 10.12, (default is current OS version)

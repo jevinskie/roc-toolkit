@@ -26,6 +26,7 @@ BuildRequires: speexdsp-devel
 BuildRequires: sox-devel
 BuildRequires: openssl-devel
 BuildRequires: pulseaudio-libs-devel
+BuildRequires: flac-devel
 
 %description
 Roc is a toolkit for real-time audio streaming over the network.

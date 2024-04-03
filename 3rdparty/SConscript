@@ -16,6 +16,7 @@ vendored_dependencies = [
 thirdparty_versions = {
     # libs
     'alsa':             '1.0.29',
+    'flac':             '1.4.3',
     'json-c':           '0.12-20140410',
     'libatomic_ops':    '7.6.10',
     'libunwind':        '1.2.1',
@@ -191,6 +192,37 @@ elif 'openfec' in system_dependencies:
                                  '#include <of_openfec_api.h>', 'c'):
         env.Die(
             "openfec has no LDPC-Staircase codec support (OF_USE_LDPC_STAIRCASE_CODEC)")
+
+    env = conf.Finish()
+
+# dep: flac
+if 'flac' in autobuild_dependencies:
+    env.BuildThirdParty(thirdparty_versions, 'flac')
+
+elif 'flac' in system_dependencies:
+    conf = Configure(env, custom_tests=env.CustomTests)
+
+    if not (conf.AddPkgConfigDependency('flac', '--cflags --libs') \
+        and conf.AddPkgConfigDependency('flac++', '--cflags --libs')):
+        conf.env.AddManualDependency(libs=['FLAC', 'FLAC++'])
+
+        if GetOption('with_flac_includes'):
+            conf.env.Append(CPPPATH=GetOption('with_flac_includes'))
+        elif not is_crosscompiling:
+           for prefix in ['/usr/local', '/usr']:
+               if os.path.exists(prefix + '/include/FLAC') \
+                   and os.path.exists(prefix + '/include/FLAC++'):
+                   conf.env.Append(CPPPATH=prefix + '/include')
+                   conf.env.Append(LIBPATH=prefix + '/lib')
+                   break
+
+    if not conf.CheckLibWithHeaderExt(
+            'FLAC', 'FLAC/all.h', 'C', run=not is_crosscompiling):
+        env.Die("FLAC not found (see 'config.log' for details)")
+
+    if not conf.CheckLibWithHeaderExt(
+            'FLAC++', 'FLAC++/all.h', 'CXX', run=not is_crosscompiling):
+        env.Die("FLAC++ not found (see 'config.log' for details)")
 
     env = conf.Finish()
 

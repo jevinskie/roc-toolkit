@@ -199,6 +199,11 @@ AddOption('--disable-openfec',
           action='store_true',
           help='disable OpenFEC support required for FEC codes')
 
+AddOption('--disable-flac',
+          dest='disable_flac',
+          action='store_true',
+          help='disable FLAC support')
+
 AddOption('--disable-speexdsp',
           dest='disable_speexdsp',
           action='store_true',
@@ -805,6 +810,12 @@ else:
         env.Append(ROC_TARGETS=[
             'target_openfec',
         ])
+
+    if not GetOption('disable_flac'):
+        env.Append(ROC_TARGETS=[
+            'target_flac',
+        ])
+
 
     if not GetOption('disable_openssl'):
         env.Append(ROC_TARGETS=[

@@ -62,6 +62,10 @@ Runtime dependencies
      - **version**
      - **comment**
 
+   * - `FLAC <https://xiph.org/flac/>`_
+     - >= 1.4.3
+     - optional, used for FLAC support
+
    * - `libatomic_ops <https://github.com/ivmai/libatomic_ops/>`_
      - >= 7.6.0
      - only required on pre-C11 compilers
