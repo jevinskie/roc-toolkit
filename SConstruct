@@ -286,6 +286,11 @@ AddOption('--override-targets',
                 " pass a comma-separated list of target names,"
                 " e.g. 'pc,posix,posix_ext,gnu,libuv,openfec,...'"))
 
+AddOption('--prefer-cmake',
+          dest='prefer_cmake',
+          action='store_true',
+          help=("prefer CMake builds over autoconf builds"))
+
 # configure even in dry run mode
 SCons.SConf.dryrun = 0
 
@@ -744,6 +749,9 @@ env['ROC_ANDROID_PLATFORM'] = '21'
 # macOS target platform version and architecture(s)
 env['ROC_MACOS_PLATFORM'] = env.ParseMacosPlatform(meta.host, GetOption('macos_platform'))
 env['ROC_MACOS_ARCH'] = env.ParseMacosArch(meta.host, GetOption('macos_arch'))
+
+# prefer CMake builds?
+env['ROC_PREFER_CMAKE'] = '1' if GetOption('prefer_cmake') else '0'
 
 # enabled target directories
 env['ROC_TARGETS'] = []

@@ -1006,6 +1006,9 @@ parser.add_argument('--macos-platform', dest='macos_platform', type=str,
 parser.add_argument('--macos-arch', dest='macos_arch', type=str, nargs='*',
                     help='macos target architecture(s)')
 
+parser.add_argument('--prefer-cmake', dest='prefer_cmake', action='store_true',
+                    help='prefer CMake builds vs autoconf builds')
+
 args = parser.parse_args()
 
 #
@@ -1046,7 +1049,8 @@ ctx.pkg_rpath_dir = os.path.join(ctx.pkg_dir, 'rpath')
 ctx.log_file = os.path.join(ctx.pkg_dir, 'build.log')
 ctx.commit_file = os.path.join(ctx.pkg_dir, 'commit')
 
-ctx.prefer_cmake = bool(args.android_platform)
+ctx.prefer_cmake = bool(args.android_platform) \
+    or args.prefer_cmake or bool(ctx.env['ROC_PREFER_CMAKE'])
 
 #
 # Build package.

@@ -39,6 +39,9 @@ def _build_thirdparty(env, versions, name, deps, is_native):
     thirdparty_dir = os.path.join(build_root, versioned_name)
     distfiles_dir = os.path.join('3rdparty', '_distfiles')
 
+    if 'ROC_PREFER_CMAKE' in env.Dictionary():
+        env_vars += ['ROC_PREFER_CMAKE=' + env['ROC_PREFER_CMAKE']]
+
     if not os.path.exists(os.path.join(thirdparty_dir, 'commit')):
         saved_cwd = os.getcwd()
         os.chdir(project_root)
