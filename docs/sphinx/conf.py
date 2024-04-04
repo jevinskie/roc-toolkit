@@ -73,7 +73,7 @@ html_css_files = [
 ]
 
 html_js_files = [
-    'analytics.js',
+    # 'analytics.js',
 ]
 
 # -- Options for manual page output ---------------------------------------
